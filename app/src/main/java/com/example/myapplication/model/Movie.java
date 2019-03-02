@@ -4,17 +4,20 @@ public class Movie {
     private String Title;
     private String Year;
     private String imdbID;
+    private String Type;
     private String Poster;
 
     public Movie() {
 
     }
 
-    public Movie(String Title, String Year, String imdbID, String Poster){
+    public Movie(String Title, String Year, String imdbID, String Poster,String Type){
         this.Title = Title;
         this.Year = Year;
         this.imdbID = imdbID;
+        this.Type = Type;
         this.Poster = Poster;
+
     }
 
     public String getTitle() {
@@ -27,6 +30,10 @@ public class Movie {
 
     public String getImdbID() {
         return imdbID;
+    }
+
+    public String getType() {
+        return Type;
     }
 
     public String getPoster() {
@@ -47,5 +54,9 @@ public class Movie {
 
     public void setPoster(String poster) {
         Poster = poster;
+    }
+
+    public void setType(String type) {
+        Type = type;
     }
 }

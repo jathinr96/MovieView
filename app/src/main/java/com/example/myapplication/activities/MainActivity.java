@@ -3,6 +3,8 @@ package com.example.myapplication.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,15 +15,41 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.myapplication.R;
+import com.example.myapplication.adapter.RecyclerViewAdapter;
+import com.example.myapplication.model.Movie;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final String JSON_URL = "http://omdbapi.com/?s=can&y=2018&type=movie&apikey=9f4f767e";
+    private JsonObjectRequest request ;
+    private RequestQueue requestQueue ;
+    private List<Movie> lstMovie ;
+    private RecyclerView recyclerView ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        lstMovie = new ArrayList<>();
+        recyclerView = findViewById(R.id.recyclerviewid);
+        jsonrequest();
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,6 +71,60 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    private void jsonrequest(){
+        request = new JsonObjectRequest
+                (com.android.volley.Request.Method.GET, JSON_URL, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        JSONArray jsonArray = new JSONArray();
+                        try {
+                            jsonArray = response.getJSONArray("Search");
+                        }catch (Exception e){}
+                        JSONObject jsonObject = null ;
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            try {
+                                jsonObject = jsonArray.getJSONObject(i) ;
+                                Movie movie = new Movie() ;
+                                movie.setTitle(jsonObject.getString("Title"));
+                                movie.setType(jsonObject.getString("Type"));
+                                movie.setYear(jsonObject.getString("Year"));
+                                movie.setImdbID(jsonObject.getString("imdbID"));
+                                movie.setPoster(jsonObject.getString("Poster"));
+                                lstMovie.add(movie);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+
+                        setuprecyclerview(lstMovie);
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+
+                    }
+                });
+
+        requestQueue = Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(request);
+
+
+    }
+
+    private void setuprecyclerview(List<Movie> lstMovie) {
+
+        RecyclerViewAdapter myadapter = new RecyclerViewAdapter(this,lstMovie);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        recyclerView.setAdapter(myadapter);
+    }
+
 
     @Override
     public void onBackPressed() {

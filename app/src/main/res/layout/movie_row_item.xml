@@ -39,17 +39,23 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/Type"
+            android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Type" />
 
         <TextView
-            android:id="@+id/Year"
+            android:id="@+id/year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="year" />
+        <TextView
+            android:id="@+id/imdb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type" />
+
     </LinearLayout>
 
 
