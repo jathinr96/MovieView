@@ -5,6 +5,7 @@ public class Movie {
     private String Year;
     private String imdbID;
     private String Type;
+    private String Description;
     private String Poster;
 
     public Movie() {
@@ -15,6 +16,7 @@ public class Movie {
         this.Title = Title;
         this.Year = Year;
         this.imdbID = imdbID;
+        this.Description = Description;
         this.Type = Type;
         this.Poster = Poster;
 
@@ -36,6 +38,10 @@ public class Movie {
         return Type;
     }
 
+    public String getDescription() {
+        return Description;
+    }
+
     public String getPoster() {
         return Poster;
     }
@@ -46,6 +52,10 @@ public class Movie {
 
     public void setYear(String year) {
         Year = year;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
     }
 
     public void setImdbID(String imdbID) {
